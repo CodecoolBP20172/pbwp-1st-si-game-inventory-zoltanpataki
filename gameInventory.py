@@ -1,14 +1,24 @@
 # This is the file where you must work. Write code in the functions, create new functions, 
 # so they work according to the specification
-
+import operator
+import sys
+import csv
 # Displays the inventory.
 def display_inventory(inventory):
-    pass
+    print('Inventory:\n')
+    for item,value in inventory.items():
+        print(value,item)
+    print('\nTotal number of items: %d'%sum(inventory.values()))
 
 
 # Adds to the inventory dictionary a list of items from added_items.
 def add_to_inventory(inventory, added_items):
-    pass
+    for item in added_items:
+        if item in inventory:
+            inventory[item]+=1
+        else:
+            inventory[item]=1
+    return inventory
 
 
 # Takes your inventory and displays it in a well-organized table with 
@@ -18,8 +28,31 @@ def add_to_inventory(inventory, added_items):
 # - "count,desc" means the table is ordered by count (of items in the inventory) 
 #   in descending order
 # - "count,asc" means the table is ordered by count in ascending order
-def print_table(inventory, order=None):
-    pass
+def print_table(inventory,order):
+    unsortedinv=sorted(inv.items())    
+    sortedinv1=sorted(inv.items(),key=operator.itemgetter(1))
+    sortedinv2=sorted(inv.items(),key=operator.itemgetter(1), reverse=True)
+    if order == '':
+        sorting=unsortedinv
+    elif order == 'count,asc':
+        sorting=sortedinv1
+    elif order == 'count,desc':
+        sorting=sortedinv2
+    lst=[]
+    for tup in sorting:
+        lst.append(len(tup[0]))
+    k=max(lst)
+    j=max(lst)
+    print('Inventory: \n')
+    print('count'.rjust(k),'   ','item name'.rjust(j))
+    for i in range(k+j+5):
+        sys.stdout.write('-')
+    print('\n')
+    for tup in sorting:
+        print(str(tup[1]).rjust(k),'   ',str(tup[0]).rjust(j))
+    for i in range(k+j+5):
+        sys.stdout.write('-')
+    print('\nThe total number of items: %d'%sum(inventory.values()))
 
 
 # Imports new inventory items from a file
@@ -27,7 +60,17 @@ def print_table(inventory, order=None):
 # "import_inventory.csv". The import automatically merges items by name.
 # The file format is plain text with comma separated values (CSV).
 def import_inventory(inventory, filename="import_inventory.csv"):
-    pass
+    file=open(filename,'r')
+    reader=csv.reader(file)
+    for row in reader:
+        importlst=(row)
+    for item in importlst:
+        if item in inventory:
+            inventory[item]+=1
+        else:
+            inventory[item]=1
+    return (inventory)
+    file.close()
 
 
 # Exports the inventory into a .csv file.
@@ -35,4 +78,13 @@ def import_inventory(inventory, filename="import_inventory.csv"):
 # called "export_inventory.csv". The file format is the same plain text 
 # with comma separated values (CSV).
 def export_inventory(inventory, filename="export_inventory.csv"):
-    pass
+    exportlst=[]
+    for key in inventory:
+        value=0
+        while value<inventory[key]:
+            exportlst.append(key)
+            value+=1
+    print(exportlst)
+    with open(str(filename),'w',newline='') as outputstream:
+        writer=csv.writer(outputstream)
+        writer.writerow(exportlst)
