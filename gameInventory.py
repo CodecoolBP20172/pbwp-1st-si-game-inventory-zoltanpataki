@@ -3,6 +3,9 @@
 import operator
 import sys
 import csv
+inv = {'rope': 1, 'torch': 6, 'gold coin': 42, 'daggerjgjdsfjdshkjfhskjdfhjdshf': 1, 'arrow': 12} 
+
+
 # Displays the inventory.
 def display_inventory(inventory):
     print('Inventory:\n')
@@ -15,9 +18,9 @@ def display_inventory(inventory):
 def add_to_inventory(inventory, added_items):
     for item in added_items:
         if item in inventory:
-            inventory[item]+=1
+            inventory[item] += 1
         else:
-            inventory[item]=1
+            inventory[item] = 1
     return inventory
 
 
@@ -28,11 +31,11 @@ def add_to_inventory(inventory, added_items):
 # - "count,desc" means the table is ordered by count (of items in the inventory) 
 #   in descending order
 # - "count,asc" means the table is ordered by count in ascending order
-def print_table(inventory,order):
-    unsortedinv=sorted(inv.items())    
-    sortedinv1=sorted(inv.items(),key=operator.itemgetter(1))
-    sortedinv2=sorted(inv.items(),key=operator.itemgetter(1), reverse=True)
-    if order == '':
+def print_table(inventory, order=None):
+    unsortedinv = sorted(inventory.items())    
+    sortedinv1 = sorted(inventory.items(), key=operator.itemgetter(1))
+    sortedinv2 = sorted(inventory.items(), key=operator.itemgetter(1), reverse=True)
+    if order is None:
         sorting=unsortedinv
     elif order == 'count,asc':
         sorting=sortedinv1
@@ -69,8 +72,8 @@ def import_inventory(inventory, filename="import_inventory.csv"):
             inventory[item]+=1
         else:
             inventory[item]=1
-    return (inventory)
     file.close()
+    return (inventory)
 
 
 # Exports the inventory into a .csv file.
@@ -88,3 +91,8 @@ def export_inventory(inventory, filename="export_inventory.csv"):
     with open(str(filename),'w',newline='') as outputstream:
         writer=csv.writer(outputstream)
         writer.writerow(exportlst)
+
+
+
+import_inventory(inv,'grading_inventory.csv')
+display_inventory(inv)
