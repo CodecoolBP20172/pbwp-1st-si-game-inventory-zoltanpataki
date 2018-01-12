@@ -93,6 +93,6 @@ def export_inventory(inventory, filename="export_inventory.csv"):
         writer.writerow(exportlst)
 
 
-
+# function calling
 import_inventory(inv,'grading_inventory.csv')
 display_inventory(inv)
